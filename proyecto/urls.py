@@ -17,16 +17,10 @@ Including another URLconf
 from django.contrib import admin
 #Include, permite incorporar las urls de otras aplicaciones
 from django.urls import path, include
+from django.shortcuts import redirect
 
 urlpatterns = [
-    #Django Admnin
-    path('admin/',
-     admin.site.urls
-     ),
-
-     #Urls de nuestra aplicación de usuarios:
-     path(
-        '',
-        include('usuarios.urls')
-     ),
+    path('', lambda request: redirect('login/')),  
+    path('admin/', admin.site.urls),
+    path('', include('usuarios.urls')),
 ]

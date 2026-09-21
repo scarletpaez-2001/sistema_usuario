@@ -13,23 +13,23 @@ class RegistroUsuarioForm(UserCreationForm):
 
 
 # Agregamos el correo electrónico porque queremos solicitarlo obligatoriamente. #
-email = forms.EmailField(
-    required=True,
-    label='Correo electrónico'
-)
+    email = forms.EmailField(
+        required=True,
+        label='Correo electrónico'
+    )
 
-class Meta:
+    class Meta:
 
     #Indicamos que este formulario trabaja con el modelo user.
-    model = User
+        model = User
 
     #Definimos los campos que aparecerán en nuestro formulario
-    fields = [
-        'username',
-        'first_name',
-        'last_name',
-        'email',
-        'password1',
-        'password2',
+        fields = [
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+            'password1',
+            'password2',
     ]
     
