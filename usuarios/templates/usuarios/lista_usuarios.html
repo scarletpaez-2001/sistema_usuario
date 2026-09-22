@@ -2,54 +2,192 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Usuarios</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios y Staff</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light p-4">
-    <div class="container bg-white p-4 rounded shadow-sm">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2>Gestión de Usuarios y Roles</h2>
-            <a href="{% url 'bienvenida' %}" class="btn btn-outline-secondary btn-sm">Volver al Inicio</a>
-        </div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #110426 0%, #2b0738 50%, #581c87 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #ffffff;
+            padding: 40px 15px;
+        }
 
-        <table class="table table-striped table-hover align-middle mt-3">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Usuario</th>
-                    <th>Email</th>
-                    <th>Rol</th>
-                    <th>Estado</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for usuario in usuarios %}
-                <tr>
-                    <td>{{ usuario.id }}</td>
-                    <td>{{ usuario.username }}</td>
-                    <td>{{ usuario.email|default:"Sin email" }}</td>
-                    <td>
-                        {% if usuario.perfil and usuario.perfil.rol %}
-                            <span class="badge bg-info text-dark">{{ usuario.perfil.rol.nombre }}</span>
-                        {% else %}
-                            <span class="badge bg-secondary">Sin asignar</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if usuario.is_active %}
-                            <span class="badge bg-success">Activo</span>
-                        {% else %}
-                            <span class="badge bg-danger">Inactivo</span>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="5" class="text-center text-muted">No hay usuarios registrados.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        .dashboard-container {
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        .glass-card {
+            background: rgba(20, 10, 35, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Estilos estrictos para corregir el fondo de la tabla */
+        .table-custom {
+            --bs-table-bg: transparent !important;
+            --bs-table-color: #ffffff !important;
+            color: #ffffff !important;
+            vertical-align: middle;
+            margin-bottom: 0;
+        }
+
+        .table-custom tr, .table-custom td, .table-custom th {
+            background-color: transparent !important;
+        }
+
+        .table-custom thead {
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .table-custom th {
+            color: #f472b6 !important;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.82rem;
+            letter-spacing: 1px;
+            padding-bottom: 15px;
+        }
+
+        .table-custom td {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 16px 12px;
+            font-size: 0.95rem;
+            color: #f1f5f9 !important;
+        }
+
+        /* Badges visibles y contrastados */
+        .badge-role {
+            background: #6b21a8 !important;
+            border: 1px solid #c026d3;
+            color: #ffffff !important;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.82rem;
+            display: inline-block;
+        }
+
+        .badge-status {
+            background: #15803d !important;
+            border: 1px solid #4ade80;
+            color: #ffffff !important;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.82rem;
+            display: inline-block;
+        }
+
+        .btn-add-user {
+            background: linear-gradient(90deg, #a21caf 0%, #d946ef 100%);
+            border: none;
+            color: #ffffff;
+            border-radius: 20px;
+            padding: 8px 18px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(162, 28, 175, 0.4);
+        }
+
+        .btn-add-user:hover {
+            transform: translateY(-2px);
+            color: #ffffff;
+            box-shadow: 0 6px 18px rgba(162, 28, 175, 0.6);
+        }
+
+        .btn-back {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border-radius: 20px;
+            padding: 8px 18px;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.25);
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <div class="glass-card">
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+                <div>
+                    <h3 class="fw-bold m-0"><i class="bi bi-shield-lock-fill me-2 text-warning"></i>Gestión de Usuarios y Staff</h3>
+                    <p class="text-white-50 small m-0 mt-1">Administración de acceso, entrenadores y roles de gimnasio.</p>
+                </div>
+                
+                <div class="d-flex gap-2">
+                    <!-- Botón para Agregar Nuevo Usuario -->
+                    <a href="{% url 'registro' %}" class="btn-add-user">
+                        <i class="bi bi-person-plus-fill me-1"></i> + Agregar Usuario
+                    </a>
+                    
+                    <a href="{% url 'bienvenida' %}" class="btn-back">
+                        <i class="bi bi-arrow-left me-1"></i> Volver al Inicio
+                    </a>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-custom">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Usuario</th>
+                            <th>Email</th>
+                            <th>Rol / Área</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for u in usuarios %}
+                        <tr>
+                            <td class="text-white-50">#{{ u.id }}</td>
+                            <td class="fw-bold text-white">{{ u.username }}</td>
+                            <td class="text-white-50">{{ u.email|default:"Sin correo" }}</td>
+                            <td>
+                                {% if u.is_superuser %}
+                                    <span class="badge-role" style="background: #9f1239 !important; border-color: #f43f5e;">
+                                        Administración de Sede
+                                    </span>
+                                {% elif u.is_staff %}
+                                    <span class="badge-role" style="background: #1e40af !important; border-color: #60a5fa;">
+                                        Entrenador personal
+                                    </span>
+                                {% else %}
+                                    <span class="badge-role">
+                                        Socio Activo
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge-status">
+                                    <i class="bi bi-check-circle-fill me-1"></i> Activo
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+
 </body>
 </html>
