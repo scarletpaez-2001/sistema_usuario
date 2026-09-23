@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Nuevos Socios / Personal</title>
+    <title>Registro de Nuevos Usuarios -  Socios</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        .form-text, .helptext, ul.helptext li {
+        color: #717172 !important;
+        font-size: 0.85rem;
+        }
         body {
             background-color: #0d0d11;
             color: #f1f1f1;
@@ -51,15 +55,15 @@
         <div class="row g-4 align-items-stretch">
             
             <!-- Columna Izquierda: Banner / Marca -->
-            <div class="col-lg-5 d-none d-lg-block">
+            <div class="col-md-5">
                 <div class="bg-purple-brand h-100 p-5 d-flex flex-column justify-content-between shadow-lg">
                     <div>
-                        <span class="badge bg-dark text-purple-light px-3 py-2 mb-3">SISTEMA CONECTA</span>
-                        <h1 class="display-6 fw-bold mt-2">Nuestra plataforma.<br>Nuestro equipo.<br>Conectados siempre.</h1>
+                        <span class="badge bg-dark text-purple-light px-3 py-2 mb-3">PULSEFIT STUDIO</span>
+                        <h1 class="display-6 fw-bold mt-2"><br>Salud y Bienestar.<br>Comprometidos con el equipo.</h1>
                         <p class="text-light opacity-75 mt-3">Bienvenido al portal de usuarios. Accede a tu perfil y gestiona tus datos del sistema.</p>
                     </div>
                     <div class="p-3 rounded-4 bg-dark bg-opacity-25 border border-white border-opacity-10">
-                        <small class="text-purple-light fw-semibold">✓ Seguridad de acceso integrada</small>
+                        <small class="text-purple-light fw-semibold">✓ Acceso y control de perfil protegido</small>
                     </div>
                 </div>
             </div>
@@ -67,9 +71,9 @@
             <!-- Columna Derecha: Formulario de Registro -->
             <div class="col-lg-7">
                 <div class="form-card p-4 p-md-5 shadow-lg">
-                    <span class="text-purple-light fw-bold small text-uppercase">Registro de Trabajadores</span>
+                    <span class="text-purple-light fw-bold small text-uppercase">Registro de Usuarios / Colaboradores</span>
                     <h2 class="fw-bold mb-1">Crea tu cuenta</h2>
-                    <p class="text-muted small mb-4">Ingresa tus datos para acceder al sistema.</p>
+                    <p class="text-light opacity-75">Ingresa tus datos para acceder al sistema.</p>
 
                     <form method="post">
                         {% csrf_token %}
@@ -89,7 +93,7 @@
                             {% endfor %}
                         </div>
 
-                        <button type="submit" class="btn btn-purple w-100 py-2.5 mt-4">Registrar Cuenta</button>
+                        <button type="submit" class="btn btn-purple w-100 py-2.5 mt-4">Crear Cuenta</button>
                     </form>
 
                     <div class="mt-4 text-center">

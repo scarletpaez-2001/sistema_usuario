@@ -8,28 +8,34 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User 
 
 #Crear formulario de registro
-#Heredamos de UserCreationForm para aprovevhar las validaciones de usuarios y contraseñas que django trae incorporada.
 class RegistroUsuarioForm(UserCreationForm):
-
-
-# Agregamos el correo electrónico porque queremos solicitarlo obligatoriamente. #
+    # Agregamos los campos explícitos para definir sus etiquetas 
+    first_name = forms.CharField(
+        label='Nombre',
+        max_length=30,
+        required=True
+    )
+    last_name = forms.CharField(
+        label='Apellido',
+        max_length=30,
+        required=True
+    )
     email = forms.EmailField(
         required=True,
         label='Correo electrónico'
     )
 
     class Meta:
-
-    #Indicamos que este formulario trabaja con el modelo user.
         model = User
-
-    #Definimos los campos que aparecerán en nuestro formulario
         fields = [
             'username',
             'first_name',
             'last_name',
             'email',
-            'password1',
-            'password2',
-    ]
-    
+        ]
+        labels = {
+            'username': 'Nombre de usuario',
+        }
+        help_texts = {
+            'username': 'Requerido. 150 caracteres o menos. Letras, números y @/./+/-/_ solamente.',
+        }
